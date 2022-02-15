@@ -421,17 +421,32 @@ void v_gtext(int16_t handle, int16_t x, int16_t y, const char *string)
    vdi_ptsin[1] = y;
 
    int i = 0;
-   while ((vdi_intin[i++] = *(string++))) {
+   while (string[i]) {
+      vdi_intin[i] = string[i];
+      i++;
    }
 
    vdi_control[0] = 8;
    vdi_control[1] = 1;
-   vdi_control[3] = i - 1;
+   vdi_control[3] = i;
    vdi_control[6] = handle;
 
    vdi();
 }
 
+void v_pline(int16_t handle, int16_t count, int16_t *pxyarray) {
+   for (int i = 0; i < count; i++) {
+      vdi_ptsin[i << 1] = pxyarray[i << 1];
+      vdi_ptsin[(i << 1) | 1] = pxyarray[(i << 1) | 1];
+   }
+
+   vdi_control[0] = 6;
+   vdi_control[1] = count;
+   vdi_control[3] = 0;
+   vdi_control[6] = handle;
+
+   vdi();
+}
 
 int16_t vswr_mode(int16_t handle, int16_t mode)
 {
@@ -600,6 +615,24 @@ int16_t vst_effects(int16_t handle, int16_t effect) {
 
    return vdi_intout[0];
 }
+
+void vst_height(int16_t handle, int16_t height, int16_t *char_width, int16_t *char_height, int16_t *cell_width, int16_t *cell_height) {
+   vdi_ptsin[0] = 0;
+   vdi_ptsin[1] = height;
+
+   vdi_control[0] = 12;
+   vdi_control[1] = 1;
+   vdi_control[3] = 0;
+   vdi_control[6] = handle;
+
+   vdi();
+
+   *char_width  = vdi_ptsout[0];
+   *char_height = vdi_ptsout[1];
+   *cell_width  = vdi_ptsout[2];
+   *cell_height = vdi_ptsout[3];   
+}
+
 
 int16_t menu_bar(OBJECT *me_btree, Menu_Operation me_bshow)
 {

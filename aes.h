@@ -97,23 +97,27 @@ int16_t evnt_multi (int16_t ev_mflags,  int16_t ev_mbclicks,
     int16_t *ev_mbreturn);
 
 // VDI
-int16_t vsf_color(int16_t handle, int16_t color_index);
 void vr_recfl(int16_t handle, int16_t *pxyarray);
 void v_bar(int16_t handle, int16_t *pxyarray);
+void v_pline(int16_t handle, int16_t count, int16_t *pxyarray);
 int16_t vswr_mode(int16_t handle, int16_t mode);
-int16_t vsf_interior(int16_t handle, int16_t style);
 void v_ellipse (int16_t handle, int16_t x, int16_t y, int16_t xradius, int16_t yradius);
 void v_gtext(int16_t handle, int16_t x, int16_t y, const char *string);
 void vqf_attributes(int16_t handle, int16_t *attrib);
-int16_t vsf_style(int16_t handle, int16_t style_index);
-int16_t vsf_perimeter(int16_t handle, int16_t per_vis);
 void v_circle(int16_t handle, int16_t x, int16_t y, int16_t radius);
+void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray);
 
 // VDI Attribute
+// ...Text
 int16_t vst_color(int16_t handle, int16_t color_index);
 int16_t vst_effects(int16_t handle, int16_t effect);
+void vst_height(int16_t handle, int16_t height, int16_t *char_width, int16_t *char_height, int16_t *cell_width, int16_t *cell_height);
+// ...Fill
+int16_t vsf_color(int16_t handle, int16_t color_index);
+int16_t vsf_interior(int16_t handle, int16_t style);
+int16_t vsf_style(int16_t handle, int16_t style_index);
+int16_t vsf_perimeter(int16_t handle, int16_t per_vis);
 
-void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray);
 
 // resource files
 int16_t rsrc_free();

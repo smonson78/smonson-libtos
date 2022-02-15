@@ -7,7 +7,7 @@
 
 #define MALLOC_MIN_ALLOCATION 32
 
-#define NULL ((void *)0)
+#define NULL 0
 
 extern FILE *stdout;
 extern void _exit(uint16_t retval);
