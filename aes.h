@@ -17,6 +17,15 @@ typedef enum {
     WM_NEWTOP
 } WM_Event;
 
+typedef enum {
+  MU_KEYBD = (1 << 0),
+  MU_BUTTON = (1 << 1),
+  MU_M1 = (1 << 2),
+  MU_M2 = (1 << 3),
+  MU_MESAG = (1 << 4),
+  MU_TIMER = (1 << 5)
+} WM_EventType;
+
 extern int16_t global[];
 extern int16_t control[];
 extern int16_t int_in[];
@@ -117,7 +126,8 @@ int16_t vsf_color(int16_t handle, int16_t color_index);
 int16_t vsf_interior(int16_t handle, int16_t style);
 int16_t vsf_style(int16_t handle, int16_t style_index);
 int16_t vsf_perimeter(int16_t handle, int16_t per_vis);
-
+// ...Line
+int16_t vsl_color(int16_t handle, int16_t color_index);
 
 // resource files
 int16_t rsrc_free();

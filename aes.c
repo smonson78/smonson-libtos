@@ -372,7 +372,7 @@ int16_t evnt_multi (int16_t ev_mflags,  int16_t ev_mbclicks,
   *ev_mkreturn = int_out[5];
   *ev_mbreturn = int_out[6];
 
-  return vdi_intout[0];
+  return int_out[0];
 }
 
 void vr_recfl(int16_t handle, int16_t *pxyarray)
@@ -468,6 +468,21 @@ int16_t vsf_color(int16_t handle, int16_t color_index)
     vdi_intin[0] = color_index;
 
     vdi_control[0] = 25;
+    vdi_control[1] = 0;
+    vdi_control[3] = 1;
+    vdi_control[6] = handle;
+
+    vdi();
+
+    return vdi_intout[0];
+}
+
+// Set line colour
+int16_t vsl_color(int16_t handle, int16_t color_index)
+{
+    vdi_intin[0] = color_index;
+
+    vdi_control[0] = 17;
     vdi_control[1] = 0;
     vdi_control[3] = 1;
     vdi_control[6] = handle;
