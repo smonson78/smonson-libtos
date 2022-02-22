@@ -1,5 +1,5 @@
 CC=m68k-elf-gcc
-CFLAGS=-Os -g -Wall -m68000 -fomit-frame-pointer -fno-builtin -I. -ffreestanding
+CFLAGS=-O2 -g -Wall -m68000 -fomit-frame-pointer -fno-builtin -I. -ffreestanding
 
 TARGET=libtos.a
 TOSLIBS=tos.o aes.o xbios.o aes_window.o gemdos.o

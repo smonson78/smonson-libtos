@@ -21,6 +21,8 @@ void Fclose(FILE handle);
 int32_t Fwrite(FILE handle, int32_t count, void *buf);
 int32_t Fread(FILE handle, int32_t count, void *buf);
 
+
 /* Time and date */
 uint32_t Tgettime();
+uint32_t Tgetdate();
 #endif
