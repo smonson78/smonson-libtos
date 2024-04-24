@@ -17,15 +17,6 @@ typedef enum {
     WM_NEWTOP
 } WM_Event;
 
-typedef enum {
-  MU_KEYBD = (1 << 0),
-  MU_BUTTON = (1 << 1),
-  MU_M1 = (1 << 2),
-  MU_M2 = (1 << 3),
-  MU_MESAG = (1 << 4),
-  MU_TIMER = (1 << 5)
-} WM_EventType;
-
 extern int16_t global[];
 extern int16_t control[];
 extern int16_t int_in[];
@@ -105,29 +96,20 @@ int16_t evnt_multi (int16_t ev_mflags,  int16_t ev_mbclicks,
     int16_t *ev_mmokstate, int16_t *ev_mkreturn,
     int16_t *ev_mbreturn);
 
-// VDI
+// vdi
+int16_t vsf_color(int16_t handle, int16_t color_index);
 void vr_recfl(int16_t handle, int16_t *pxyarray);
 void v_bar(int16_t handle, int16_t *pxyarray);
-void v_pline(int16_t handle, int16_t count, int16_t *pxyarray);
 int16_t vswr_mode(int16_t handle, int16_t mode);
+int16_t vsf_interior(int16_t handle, int16_t style);
 void v_ellipse (int16_t handle, int16_t x, int16_t y, int16_t xradius, int16_t yradius);
 void v_gtext(int16_t handle, int16_t x, int16_t y, const char *string);
 void vqf_attributes(int16_t handle, int16_t *attrib);
-void v_circle(int16_t handle, int16_t x, int16_t y, int16_t radius);
-void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray);
-
-// VDI Attribute
-// ...Text
-int16_t vst_color(int16_t handle, int16_t color_index);
-int16_t vst_effects(int16_t handle, int16_t effect);
-void vst_height(int16_t handle, int16_t height, int16_t *char_width, int16_t *char_height, int16_t *cell_width, int16_t *cell_height);
-// ...Fill
-int16_t vsf_color(int16_t handle, int16_t color_index);
-int16_t vsf_interior(int16_t handle, int16_t style);
 int16_t vsf_style(int16_t handle, int16_t style_index);
 int16_t vsf_perimeter(int16_t handle, int16_t per_vis);
-// ...Line
-int16_t vsl_color(int16_t handle, int16_t color_index);
+void v_circle(int16_t handle, int16_t x, int16_t y, int16_t radius);
+
+void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray);
 
 // resource files
 int16_t rsrc_free();
@@ -139,6 +121,6 @@ int16_t menu_bar(OBJECT *me_btree, Menu_Operation me_bshow);
 int16_t menu_tnormal(OBJECT *me_ntree, int16_t me_ntitle, int16_t me_nnormal);
 
 // file
-int16_t fsel_input(int8_t *fs_iinpath, int8_t *fs_iinsel, int16_t *fs_iexbutton);
+int16_t fsel_input(char *fs_iinpath, char *fs_iinsel, int16_t *fs_iexbutton);
 
 #endif

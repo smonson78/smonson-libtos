@@ -372,7 +372,7 @@ int16_t evnt_multi (int16_t ev_mflags,  int16_t ev_mbclicks,
   *ev_mkreturn = int_out[5];
   *ev_mbreturn = int_out[6];
 
-  return int_out[0];
+  return vdi_intout[0];
 }
 
 void vr_recfl(int16_t handle, int16_t *pxyarray)
@@ -421,32 +421,17 @@ void v_gtext(int16_t handle, int16_t x, int16_t y, const char *string)
    vdi_ptsin[1] = y;
 
    int i = 0;
-   while (string[i]) {
-      vdi_intin[i] = string[i];
-      i++;
+   while ((vdi_intin[i++] = *string++)) {
    }
 
    vdi_control[0] = 8;
    vdi_control[1] = 1;
-   vdi_control[3] = i;
+   vdi_control[3] = -i;
    vdi_control[6] = handle;
 
    vdi();
 }
 
-void v_pline(int16_t handle, int16_t count, int16_t *pxyarray) {
-   for (int i = 0; i < count; i++) {
-      vdi_ptsin[i << 1] = pxyarray[i << 1];
-      vdi_ptsin[(i << 1) | 1] = pxyarray[(i << 1) | 1];
-   }
-
-   vdi_control[0] = 6;
-   vdi_control[1] = count;
-   vdi_control[3] = 0;
-   vdi_control[6] = handle;
-
-   vdi();
-}
 
 int16_t vswr_mode(int16_t handle, int16_t mode)
 {
@@ -468,21 +453,6 @@ int16_t vsf_color(int16_t handle, int16_t color_index)
     vdi_intin[0] = color_index;
 
     vdi_control[0] = 25;
-    vdi_control[1] = 0;
-    vdi_control[3] = 1;
-    vdi_control[6] = handle;
-
-    vdi();
-
-    return vdi_intout[0];
-}
-
-// Set line colour
-int16_t vsl_color(int16_t handle, int16_t color_index)
-{
-    vdi_intin[0] = color_index;
-
-    vdi_control[0] = 17;
     vdi_control[1] = 0;
     vdi_control[3] = 1;
     vdi_control[6] = handle;
@@ -604,51 +574,6 @@ void v_circle(int16_t handle, int16_t x, int16_t y, int16_t radius)
    vdi();
 }
 
-// VDI Attribute-setting functions
-int16_t vst_color(int16_t handle, int16_t colour_index) {
-   vdi_intin[0] = colour_index;
-
-   vdi_control[0] = 22;
-   vdi_control[1] = 0;
-   vdi_control[3] = 1;
-   vdi_control[6] = handle;
-
-   vdi();
-
-   return vdi_intout[0];
-}
-
-int16_t vst_effects(int16_t handle, int16_t effect) {
-   vdi_intin[0] = effect;
-
-   vdi_control[0] = 106;
-   vdi_control[1] = 0;
-   vdi_control[3] = 1;
-   vdi_control[6] = handle;
-
-   vdi();
-
-   return vdi_intout[0];
-}
-
-void vst_height(int16_t handle, int16_t height, int16_t *char_width, int16_t *char_height, int16_t *cell_width, int16_t *cell_height) {
-   vdi_ptsin[0] = 0;
-   vdi_ptsin[1] = height;
-
-   vdi_control[0] = 12;
-   vdi_control[1] = 1;
-   vdi_control[3] = 0;
-   vdi_control[6] = handle;
-
-   vdi();
-
-   *char_width  = vdi_ptsout[0];
-   *char_height = vdi_ptsout[1];
-   *cell_width  = vdi_ptsout[2];
-   *cell_height = vdi_ptsout[3];   
-}
-
-
 int16_t menu_bar(OBJECT *me_btree, Menu_Operation me_bshow)
 {
    int_in[0] = me_bshow;
@@ -679,7 +604,7 @@ void new_object(OBJECT *o, uint16_t type, void *spec, uint16_t x, uint16_t y,
 }
 #endif
 
-int16_t fsel_input(int8_t *fs_iinpath, int8_t *fs_iinsel, int16_t *fs_iexbutton) {
+int16_t fsel_input(char *fs_iinpath, char *fs_iinsel, int16_t *fs_iexbutton) {
 	addr_in[0] = fs_iinpath;
 	addr_in[1] = fs_iinsel;
 
