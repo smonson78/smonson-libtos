@@ -1,7 +1,11 @@
 CC=m68k-elf-gcc
-CFLAGS=-O2 -g -Wall -m68000 -fomit-frame-pointer -fno-builtin -I. -ffreestanding
+AR=m68k-elf-ar
 
-TARGET=libtos.a
+IDIOTIC_GCC_BULLSHIT=--param=min-pagesize=0
+STD_CFLAGS=-m68000 -fomit-frame-pointer -fno-builtin -I. -ffreestanding -ffunction-sections $(IDIOTIC_GCC_BULLSHIT)
+CFLAGS=-Os -g -Wall $(STD_CFLAGS)
+
+TARGET=libtos.a libtos-dlmalloc.a
 TOSLIBS=tos.o aes.o xbios.o aes_window.o gemdos.o
 
 all: $(TARGET)
@@ -16,5 +20,8 @@ clean:
 	$(RM) $(TARGET) *.o
 	$(RM) *~
 
-libtos.a: $(TOSLIBS) dlmalloc.o libc.o
-	m68k-elf-ar -crs $@ $^
+libtos.a: $(TOSLIBS) libc.o
+	$(AR) -crs $@ $^
+
+libtos-dlmalloc.a: $(TOSLIBS) dlmalloc.o libc.o
+	$(AR) -crs $@ $^

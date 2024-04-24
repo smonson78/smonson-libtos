@@ -34,8 +34,6 @@ void strcpy(char *dest, const char *src);
 int memcmp(const void *s1, const void *s2, size_t n);
 void memset(void *dest, int c, size_t bytes);
 
-void malloc_init(size_t memsize);
-
 void abort();
 
 /* For dlmalloc */
