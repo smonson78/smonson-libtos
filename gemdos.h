@@ -23,4 +23,7 @@ int32_t Fread(FILE handle, int32_t count, void *buf);
 
 /* Time and date */
 uint32_t Tgettime();
+uint16_t Tsettime(uint16_t time);
+uint16_t Tsetdate(uint16_t date);
+
 #endif

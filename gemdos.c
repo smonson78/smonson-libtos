@@ -114,3 +114,33 @@ uint32_t Tgettime()
   );
   return val;
 }
+
+uint16_t Tsettime(uint16_t time) {
+    register int32_t val __asm__("d0");
+    __asm__ __volatile__
+    (
+      "move.w    %1,-(%%sp)\n\t"
+      "move.w    #45,-(%%sp)\n\t"
+      "trap      #1\n\t"
+      "addq.l    #4,%%sp\n\t"
+    : "=r"(val) /* outputs */
+    : "r"(time) /* inputs */
+    : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+    );
+    return val;
+}
+
+uint16_t Tsetdate(uint16_t date) {
+    register int32_t val __asm__("d0");
+    __asm__ __volatile__
+    (
+      "move.w    %1,-(%%sp)\n\t"
+      "move.w    #43,-(%%sp)\n\t"
+      "trap      #1\n\t"
+      "addq.l    #4,%%sp\n\t"
+    : "=r"(val) /* outputs */
+    : "r"(date) /* inputs */
+    : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+    );
+    return val;
+}

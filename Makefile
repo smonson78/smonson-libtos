@@ -6,7 +6,8 @@ STD_CFLAGS=-m68000 -fomit-frame-pointer -fno-builtin -I. -ffreestanding -ffuncti
 CFLAGS=-Os -g -Wall $(STD_CFLAGS)
 
 TARGET=libtos.a libtos-dlmalloc.a
-TOSLIBS=tos.o aes.o xbios.o aes_window.o gemdos.o crtstuff.o crt0.o
+TOSLIBS=tos.o aes.o xbios.o aes_window.o gemdos.o
+# the linker can't handle these: crtstuff.o crt0.o
 
 all: $(TARGET)
 
