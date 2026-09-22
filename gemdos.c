@@ -16,6 +16,21 @@ int32_t gem_super(void *stack)
     return val;
 }
 
+int16_t Dgetdrv()
+{
+  register uint16_t val __asm__("d0");
+  __asm__ __volatile__
+  (
+    "move.w    #25,-(%%sp)\n\t"
+    "trap      #1\n\t"
+    "addq.l    #2,%%sp\n\t"
+  : /* outputs */
+  : /* inputs */
+  : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+  );
+  return val;
+}
+
 int16_t Fcreate(const int8_t *fname, int16_t attr)
 {
   register uint16_t val __asm__("d0");

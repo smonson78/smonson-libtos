@@ -6,4 +6,8 @@
 
 int32_t xbios_supexec(int32_t (*func)());
 
+// BIOS functions
+void *Logbase();
+void *Physbase();
+
 #endif

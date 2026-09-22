@@ -11,8 +11,10 @@ typedef uint16_t FILE;
 #define GEMDOS_WRONLY 2
 #define GEMDOS_RDWR 4
 
-
 int32_t gemdos_super(void *stack);
+
+/* Drives/paths */
+int16_t Dgetdrv();
 
 /* File IO */
 int16_t Fcreate(const int8_t *fname, int16_t attr);

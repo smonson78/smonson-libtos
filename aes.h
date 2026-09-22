@@ -79,6 +79,7 @@ int16_t form_alert (int16_t fo_adefbttn, const char *fo_astring);
 
 void v_clswk(int16_t handle);
 void v_clsvwk(int16_t handle);
+void v_eeos(int16_t handle);
 void set_screen_attr();
 
 // event
@@ -96,7 +97,8 @@ int16_t evnt_multi (int16_t ev_mflags,  int16_t ev_mbclicks,
     int16_t *ev_mmokstate, int16_t *ev_mkreturn,
     int16_t *ev_mbreturn);
 
-// vdi
+// VDI
+int16_t vs_color(int16_t handle, int16_t color_index, int16_t *rgb_in);
 int16_t vsf_color(int16_t handle, int16_t color_index);
 void vr_recfl(int16_t handle, int16_t *pxyarray);
 void v_bar(int16_t handle, int16_t *pxyarray);

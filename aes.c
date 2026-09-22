@@ -447,19 +447,39 @@ int16_t vswr_mode(int16_t handle, int16_t mode)
    return vdi_intout[0];
 }
 
+// Set palette colour
+int16_t vs_color(int16_t handle, int16_t color_index, int16_t *rgb_in)
+{
+   int16_t i;
+
+   vdi_intin[0] = color_index;
+   for (i = 0; i < 4; i++) {
+      vdi_intin[i] = *(rgb_in++);
+   }
+
+   vdi_control[0] = 14;
+   vdi_control[1] = 0;
+   vdi_control[3] = 4;
+   vdi_control[6] = handle;
+
+   vdi();
+
+   return vdi_intout[0];
+}
+
 // Set fill colour
 int16_t vsf_color(int16_t handle, int16_t color_index)
 {
-    vdi_intin[0] = color_index;
+   vdi_intin[0] = color_index;
 
-    vdi_control[0] = 25;
-    vdi_control[1] = 0;
-    vdi_control[3] = 1;
-    vdi_control[6] = handle;
+   vdi_control[0] = 25;
+   vdi_control[1] = 0;
+   vdi_control[3] = 1;
+   vdi_control[6] = handle;
 
-    vdi();
+   vdi();
 
-    return vdi_intout[0];
+   return vdi_intout[0];
 }
 
 int16_t vsf_interior(int16_t handle, int16_t style)
