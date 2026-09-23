@@ -2,9 +2,25 @@
 
 #include "tos.h"
 
+// BIOS console input
+int32_t Bconin(const int16_t dev) {
+    register int32_t val __asm__("d0");
+    __asm__ __volatile__
+    (
+        "move.w %1,-(%%sp)\n\t"
+        "move.w #2,-(%%sp)\n\t"
+        "trap #13\n\t"
+        "addq.l #4,%%sp\n\t"
+    : "=r"(val) /* outputs */
+    : "r"(dev) /* inputs */
+    : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+    );
+	return val;
+}
+
 int32_t Cconin()
 {
-		register int32_t val __asm__("d0");
+    register int32_t val __asm__("d0");
     __asm__ __volatile__
     (
         "move.w #1,-(%%sp)\n\t"
@@ -14,9 +30,8 @@ int32_t Cconin()
     : /* inputs */
     : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
     );
-		return val;
+	return val;
 }
-
 
 void Cconws(const char* s)
 {
@@ -40,7 +55,7 @@ void Cconout(const uint16_t ch)
 		"move.w #2,-(%%sp)\n\t"
 		"trap #1\n\t"
 		"addq.l #4,%%sp\n\t"
-		: /* outputs */
+    : /* outputs */
     : "r"(ch) /* inputs */
     : "d0", "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
 	);
@@ -63,7 +78,7 @@ int32_t Cnecin()
 
 void *Malloc(int32_t number)
 {
-		register void *val __asm__("d0");
+    register void *val __asm__("d0");
     __asm__ __volatile__
     (
 		"move.l %1,-(%%sp)\n\t"
@@ -113,7 +128,7 @@ int32_t Mshrink(void *block, int32_t newsize)
 
 int32_t Random()
 {
-	  register int32_t val __asm__("d0");
+	register int32_t val __asm__("d0");
     __asm__ __volatile__
     (
         "move.w #17,-(%%sp)\n\t"

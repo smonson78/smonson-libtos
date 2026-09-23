@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <aes.h>
 #include <tos.h>
 #include <libc.h>
@@ -16,6 +17,11 @@ void *addr_out[2];
 
 // This is the VDI pointer block
 int16_t vdi_control[12];
+
+// Make it easier to access iptr and iptr2 which are 32-bit pointers stored in 2 array members
+#define iptr(x) do{ vdi_control[7] = ((uint32_t)(x)) >> 16; vdi_control[8] = ((uint32_t)(x)); }while(0)
+#define iptr2(x) do{ vdi_control[9] = ((uint32_t)(x)) >> 16; vdi_control[10] = ((uint32_t)(x)); }while(0)
+
 int16_t vdi_intin[1024];
 int16_t vdi_intout[512];
 int16_t vdi_ptsin[1024];
@@ -432,6 +438,38 @@ void v_gtext(int16_t handle, int16_t x, int16_t y, const char *string)
    vdi();
 }
 
+void v_rvon(int16_t handle) {
+   vdi_control[0] = 5;
+   vdi_control[1] = 0;
+   vdi_control[3] = 0;
+   vdi_control[5] = 13;
+   vdi_control[6] = handle;
+
+   vdi();
+}
+
+void v_rvoff(int16_t handle) {
+   vdi_control[0] = 5;
+   vdi_control[1] = 0;
+   vdi_control[3] = 0;
+   vdi_control[5] = 14;
+   vdi_control[6] = handle;
+
+   vdi();
+}
+
+void vs_curaddress (int16_t handle, int16_t row, int16_t column) {
+   vdi_intin[0] = row;
+   vdi_intin[1] = column;
+
+   vdi_control[0] = 5;
+   vdi_control[1] = 0;
+   vdi_control[3] = 2;
+   vdi_control[5] = 11;
+   vdi_control[6] = handle;
+
+   vdi();
+}
 
 int16_t vswr_mode(int16_t handle, int16_t mode)
 {
@@ -508,6 +546,25 @@ void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray)
     vdi_control[6] = handle;
 
     vdi();
+}
+
+void vro_cpyfm(int16_t handle, int16_t vr_mode, int16_t *pxyarray, MFDB *psrcMFDB, MFDB *pdesMFDB)
+{
+   vdi_intin[0] = vr_mode;
+   for (int i = 0; i < 8; i++) {
+      vdi_ptsin[1] = pxyarray[1];
+   }
+   
+   // Set control[7,8] and [9,10]
+   iptr(psrcMFDB);
+   iptr2(pdesMFDB);
+
+   vdi_control[0] = 109;
+   vdi_control[1] = 4;
+   vdi_control[3] = 1;
+   vdi_control[6] = handle;
+
+   vdi();
 }
 
 // Get fill attributes

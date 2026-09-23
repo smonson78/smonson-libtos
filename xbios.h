@@ -10,4 +10,7 @@ int32_t xbios_supexec(int32_t (*func)());
 void *Logbase();
 void *Physbase();
 
+void Setpalette(int16_t palptr[16]);
+
+
 #endif

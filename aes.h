@@ -55,6 +55,21 @@ typedef struct
   int16_t  mf_data[16];   /* Pointer form        */
 } MFORM;
 
+// Memory Form Definition Block - for raster operations
+typedef struct
+{
+  void *fd_addr;               /* Pointer to the start of the
+                                  memory block, e.g. the
+                                  screen memory base address  */
+  int16_t fd_w;                /* Width in pixels             */
+  int16_t fd_h;                /* Height in pixels            */
+  int16_t fd_wdwidth;          /* Width of a line in words    */
+  int16_t fd_stand;            /* 0 = Device-specific format  */
+                               /* 1 = Standard format         */
+  int16_t fd_nplanes;          /* Number of planes            */
+  int16_t fd_r1, fd_r2, fd_r3; /* Reserved, must be 0         */
+} MFDB;
+
 typedef enum {
     M_OFF = 256,
     M_ON = 257
@@ -80,6 +95,17 @@ int16_t form_alert (int16_t fo_adefbttn, const char *fo_astring);
 void v_clswk(int16_t handle);
 void v_clsvwk(int16_t handle);
 void v_eeos(int16_t handle);
+
+// Reverse video on/off
+void v_rvon(int16_t handle);
+void v_rvoff(int16_t handle);
+
+void vro_cpyfm(int16_t handle, int16_t vr_mode, int16_t *pxyarray, MFDB *psrcMFDB, MFDB *pdesMFDB);
+
+// Set alpha cursor to specified position
+#define v_curaddress vs_curaddress
+void vs_curaddress (int16_t handle, int16_t row, int16_t column);
+
 void set_screen_attr();
 
 // event

@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+// BIOS
+int32_t Bconin(const int16_t dev);
+
 // TOS
 int32_t Cconin();
 void Cconws(const char* s);
