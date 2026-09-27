@@ -83,11 +83,12 @@ int16_t appl_init();
 int16_t appl_exit();
 int16_t appl_write(int16_t ap_wid, int16_t ap_wlength, void *ap_wpbuff);
 
-void v_opnvwk (int16_t *work_in, int16_t *handle, int16_t *work_out);
-void vq_extnd (int16_t handle, int16_t owflag, int16_t *work_out);
+void v_opnvwk(int16_t *work_in, int16_t *handle, int16_t *work_out);
+void vq_extnd(int16_t handle, int16_t owflag, int16_t *work_out);
+void vq_mouse(int16_t handle, int16_t *pstatus, int16_t *x, int16_t *y);
 
 int16_t graf_mouse(int16_t gr_monumber, MFORM *gr_mofaddr);
-int16_t graf_handle (int16_t *gr_hwchar, int16_t *gr_hhchar,
+int16_t graf_handle(int16_t *gr_hwchar, int16_t *gr_hhchar,
   int16_t *gr_hwbox, int16_t *gr_hhbox);
 
 int16_t form_alert (int16_t fo_adefbttn, const char *fo_astring);
@@ -95,22 +96,25 @@ int16_t form_alert (int16_t fo_adefbttn, const char *fo_astring);
 void v_clswk(int16_t handle);
 void v_clsvwk(int16_t handle);
 void v_eeos(int16_t handle);
+void v_eeol(int16_t handle);
 
 // Reverse video on/off
 void v_rvon(int16_t handle);
 void v_rvoff(int16_t handle);
 
+void v_contourfill(int16_t handle, int16_t x, int16_t y, int16_t index);
+
 void vro_cpyfm(int16_t handle, int16_t vr_mode, int16_t *pxyarray, MFDB *psrcMFDB, MFDB *pdesMFDB);
 
 // Set alpha cursor to specified position
 #define v_curaddress vs_curaddress
-void vs_curaddress (int16_t handle, int16_t row, int16_t column);
+void vs_curaddress(int16_t handle, int16_t row, int16_t column);
 
 void set_screen_attr();
 
 // event
 int16_t evnt_mesag(int16_t *msg);
-int16_t evnt_multi (int16_t ev_mflags,  int16_t ev_mbclicks,
+int16_t evnt_multi(int16_t ev_mflags,  int16_t ev_mbclicks,
     int16_t ev_mbmask,  int16_t ev_mbstate,
     int16_t ev_mm1flags, int16_t ev_mm1x,
     int16_t ev_mm1y, int16_t ev_mm1width,
@@ -135,6 +139,7 @@ void v_gtext(int16_t handle, int16_t x, int16_t y, const char *string);
 void vqf_attributes(int16_t handle, int16_t *attrib);
 int16_t vsf_style(int16_t handle, int16_t style_index);
 int16_t vsf_perimeter(int16_t handle, int16_t per_vis);
+void vsf_udpat(int16_t handle, int16_t *pfill_pat, int16_t planes);
 void v_circle(int16_t handle, int16_t x, int16_t y, int16_t radius);
 
 void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray);

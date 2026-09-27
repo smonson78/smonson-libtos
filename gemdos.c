@@ -115,6 +115,24 @@ int32_t Fread(FILE handle, int32_t count, void *buf)
   return val;
 }
 
+int32_t Fseek(int32_t offset, int16_t handle, int16_t seekmode)
+{
+  register int32_t val __asm__("d0");
+  __asm__ __volatile__
+  (
+    "move.w    %3,-(%%sp)\n\t"
+    "move.w    %2,-(%%sp)\n\t"
+    "move.l    %1,-(%%sp)\n\t"
+    "move.w    #66,-(%%sp)\n\t"
+    "trap      #1\n\t"
+    "lea       10(%%sp),%%sp\n\t"
+  : "=r"(val) /* outputs */
+  : "r"(offset), "r"(handle), "r"(seekmode) /* inputs */
+  : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+  );
+  return val;
+}
+
 uint32_t Tgettime()
 {
   register uint32_t val __asm__("d0");

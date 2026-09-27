@@ -228,15 +228,13 @@ int16_t appl_init()
 
 int16_t crys_if(int16_t opcode)
 {
-        int16_t i;
+   control[0] = opcode;
+   for (int16_t i = 1; i < 4; i++) {
+      control[i] = ctrl_cnts[opcode - 10][i];
+   }
 
-        control[0] = opcode;
-        for (i = 1; i < 4; i++) {
-	        control[i] = ctrl_cnts[opcode - 10][i];
-        }
-
-        aes();
-        return int_out[0];
+   aes();
+   return int_out[0];
 }
 
 void vq_extnd (int16_t handle, int16_t owflag, int16_t *work_out)
@@ -254,7 +252,21 @@ void vq_extnd (int16_t handle, int16_t owflag, int16_t *work_out)
 	memcpy(work_out + 45, vdi_ptsout, 12);
 }
 
-void v_opnvwk (int16_t *work_in, int16_t *handle, int16_t *work_out)
+void vq_mouse(int16_t handle, int16_t *pstatus, int16_t *x, int16_t *y)
+{
+   vdi_control[0] = 124;
+   vdi_control[1] = 0;
+   vdi_control[3] = 0;
+   vdi_control[6] = handle;
+
+   vdi();
+
+   *pstatus = int_in[0];
+   *x = vdi_ptsout[0];
+   *y = vdi_ptsout[1];
+}
+
+void v_opnvwk(int16_t *work_in, int16_t *handle, int16_t *work_out)
 {
 	memcpy(vdi_intin, work_in, sizeof(int16_t) * 11);
 
@@ -288,6 +300,19 @@ void v_clsvwk(int16_t handle)
    vdi_control[6] = handle;
 
    vdi();
+}
+
+void v_contourfill(int16_t handle, int16_t x, int16_t y, int16_t index)
+{
+   int_in[0]  = index;
+   vdi_ptsin[0]  = x;
+   vdi_ptsin[1]  = y;
+   vdi_control[0] = 103;
+   vdi_control[1] = 1;
+   vdi_control[3] = 1;
+   vdi_control[6] = handle;
+
+   vdi ();
 }
 
 int16_t graf_mouse(int16_t gr_monumber, MFORM *gr_mofaddr)
@@ -458,6 +483,16 @@ void v_rvoff(int16_t handle) {
    vdi();
 }
 
+void v_eeol(int16_t handle) {
+   vdi_control[0] = 5;
+   vdi_control[1] = 0;
+   vdi_control[3] = 0;
+   vdi_control[5] = 10;
+   vdi_control[6] = handle;
+
+   vdi();
+}
+
 void vs_curaddress (int16_t handle, int16_t row, int16_t column) {
    vdi_intin[0] = row;
    vdi_intin[1] = column;
@@ -488,10 +523,8 @@ int16_t vswr_mode(int16_t handle, int16_t mode)
 // Set palette colour
 int16_t vs_color(int16_t handle, int16_t color_index, int16_t *rgb_in)
 {
-   int16_t i;
-
    vdi_intin[0] = color_index;
-   for (i = 0; i < 4; i++) {
+   for (int16_t i = 0; i < 4; i++) {
       vdi_intin[i] = *(rgb_in++);
    }
 
@@ -534,6 +567,20 @@ int16_t vsf_interior(int16_t handle, int16_t style)
    return vdi_intout[0];
 }
 
+void vsf_udpat(int16_t handle, int16_t *pfill_pat, int16_t planes)
+{
+   for (uint16_t i = 0; i < 16; i++) {
+      vdi_intin[i] = pfill_pat[i];
+   }
+
+   vdi_control[0] = 112;
+   vdi_control[1] = 0;
+   vdi_control[3] = planes * 16;
+   vdi_control[6] = handle;
+
+   vdi();
+}
+
 // Set clipping rectangle
 void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray)
 {
@@ -551,8 +598,8 @@ void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray)
 void vro_cpyfm(int16_t handle, int16_t vr_mode, int16_t *pxyarray, MFDB *psrcMFDB, MFDB *pdesMFDB)
 {
    vdi_intin[0] = vr_mode;
-   for (int i = 0; i < 8; i++) {
-      vdi_ptsin[1] = pxyarray[1];
+   for (uint16_t i = 0; i < 8; i++) {
+      vdi_ptsin[i] = pxyarray[i];
    }
    
    // Set control[7,8] and [9,10]

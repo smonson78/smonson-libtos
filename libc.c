@@ -316,3 +316,15 @@ int memcmp(const void *s1, const void *s2, size_t n)
     }
     return 0;
 }
+
+int atoi(const char *number) {
+	int acc = 0;
+
+	while (isdigit(*number)) {
+		acc *= 10;
+		acc += *number - '0';
+		number++;
+	}
+
+	return acc;
+}

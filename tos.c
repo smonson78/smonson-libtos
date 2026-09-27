@@ -18,6 +18,21 @@ int32_t Bconin(const int16_t dev) {
 	return val;
 }
 
+int16_t Bconstat(const int16_t dev) {
+    register int32_t val __asm__("d0");
+    __asm__ __volatile__
+    (
+        "move.w %1,-(%%sp)\n\t"
+        "move.w #1,-(%%sp)\n\t"
+        "trap #13\n\t"
+        "addq.l #4,%%sp\n\t"
+    : "=r"(val) /* outputs */
+    : "r"(dev) /* inputs */
+    : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+    );
+	return val;
+}
+
 int32_t Cconin()
 {
     register int32_t val __asm__("d0");
@@ -154,4 +169,17 @@ int16_t Getrez()
     : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
     );
     return val;
+}
+
+void Vsync()
+{
+    __asm__ __volatile__
+    (
+        "move.w #37,-(%%sp)\n\t"
+        "trap #14\n\t"
+        "addq.l #2,%%sp\n\t"
+    : /* outputs */
+    : /* inputs */
+    : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+    );
 }

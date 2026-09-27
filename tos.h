@@ -5,6 +5,8 @@
 
 // BIOS
 int32_t Bconin(const int16_t dev);
+int16_t Bconstat(const int16_t dev);
+void Vsync();
 
 // TOS
 int32_t Cconin();

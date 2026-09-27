@@ -22,6 +22,7 @@ int32_t Fopen(const char *fname, int16_t mode);
 void Fclose(FILE handle);
 int32_t Fwrite(FILE handle, int32_t count, void *buf);
 int32_t Fread(FILE handle, int32_t count, void *buf);
+int32_t Fseek(int32_t offset, int16_t handle, int16_t seekmode);
 
 /* Time and date */
 uint32_t Tgettime();
