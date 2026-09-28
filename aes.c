@@ -315,6 +315,63 @@ void v_contourfill(int16_t handle, int16_t x, int16_t y, int16_t index)
    vdi ();
 }
 
+// This could be wrong. Hard to find documentation on it
+void v_justified(int16_t handle, int16_t x, int16_t y, int8_t *string, int16_t length, 
+   int16_t word_space, int16_t char_space)
+{
+   int16_t *tmp;
+
+   vdi_ptsin[0]  = x;
+   vdi_ptsin[1]  = y;
+   vdi_ptsin[2]  = length;
+   vdi_ptsin[3]  = 0;
+
+   int_in[0] = word_space;
+   int_in[1] = char_space;
+
+   // Start on int_in[2]
+   tmp = &(int_in[2]);
+   
+   int16_t num_chars = 0;
+   // Put the characters from the string into int_in. I guess we've got at most 14 characters to work with?
+   while (*string) {
+      *tmp++ = *string++;
+      num_chars++;
+   }
+
+   vdi_control[0] = 11;
+   vdi_control[1] = 2;
+   // This this is just supposed to be the number of characters in the string minus one
+   //vdi_control[3] = (int16_t)(tmp - &(int_in)) -1;
+   vdi_control[3] = num_chars - 1;
+
+   vdi_control[4] = 0;
+
+   vdi_control[5] = 10;
+   vdi_control[6] = handle;
+
+   vdi();
+}
+
+// Polyline
+void v_pline(int16_t handle, int16_t count, int16_t *pxyarray)
+{
+   // for (uint16_t point = 0; point < count; point++) {
+   //    vdi_ptsin[2 * point] = pxyarray[2 * point];
+   //    vdi_ptsin[(2 * point) + 1] = pxyarray[(2 * point) + 1];
+   // }
+
+   // 4 because it's two int16_ts
+   memcpy(vdi_ptsin, pxyarray, sizeof(int16_t) * count);
+
+   vdi_control[0] = 6;
+   vdi_control[1] = count;
+   vdi_control[3] = 0;
+   vdi_control[6] = handle;
+
+   vdi();
+}
+
 int16_t graf_mouse(int16_t gr_monumber, MFORM *gr_mofaddr)
 {
   int_in[0] = gr_monumber;
@@ -355,6 +412,22 @@ int16_t form_alert(int16_t fo_adefbttn, const char *fo_astring)
   addr_in[0] = (char *)fo_astring;
 
   return crys_if(52);
+}
+
+int16_t form_dial(int16_t fo_diflag, int16_t fo_dilittlx, int16_t fo_dilittly, int16_t fo_dilittlw,
+   int16_t fo_dilittlh, int16_t fo_dibigx, int16_t fo_dibigy, int16_t fo_dibigw, int16_t fo_dibigh)
+{
+   int_in[0]  = fo_diflag;
+   int_in[1]  = fo_dilittlx;
+   int_in[2]  = fo_dilittly;
+   int_in[3]  = fo_dilittlw;
+   int_in[4]  = fo_dilittlh;
+   int_in[5]  = fo_dibigx;
+   int_in[6]  = fo_dibigy;
+   int_in[7]  = fo_dibigw;
+   int_in[8]  = fo_dibigh;
+
+   return crys_if(51);
 }
 
 int16_t evnt_mesag(int16_t *msg)
@@ -493,6 +566,17 @@ void v_eeol(int16_t handle) {
    vdi();
 }
 
+void v_eeos(int16_t handle) {
+   vdi_control[0] = 5;
+   vdi_control[1] = 0;
+   vdi_control[3] = 0;
+   vdi_control[5] = 9;
+   vdi_control[6] = handle;
+
+   vdi();
+}
+
+// Move the cursor to the current row and column
 void vs_curaddress (int16_t handle, int16_t row, int16_t column) {
    vdi_intin[0] = row;
    vdi_intin[1] = column;
@@ -524,8 +608,8 @@ int16_t vswr_mode(int16_t handle, int16_t mode)
 int16_t vs_color(int16_t handle, int16_t color_index, int16_t *rgb_in)
 {
    vdi_intin[0] = color_index;
-   for (int16_t i = 0; i < 4; i++) {
-      vdi_intin[i] = *(rgb_in++);
+   for (int16_t i = 1; i < 4; i++) {
+      vdi_intin[i] = rgb_in[i];
    }
 
    vdi_control[0] = 14;
@@ -544,6 +628,20 @@ int16_t vsf_color(int16_t handle, int16_t color_index)
    vdi_intin[0] = color_index;
 
    vdi_control[0] = 25;
+   vdi_control[1] = 0;
+   vdi_control[3] = 1;
+   vdi_control[6] = handle;
+
+   vdi();
+
+   return vdi_intout[0];
+}
+
+int16_t vst_color(int16_t handle, int16_t color_index)
+{
+   vdi_intin[0] = color_index;
+
+   vdi_control[0] = 22;
    vdi_control[1] = 0;
    vdi_control[3] = 1;
    vdi_control[6] = handle;

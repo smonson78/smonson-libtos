@@ -133,6 +133,37 @@ int32_t Fseek(int32_t offset, int16_t handle, int16_t seekmode)
   return val;
 }
 
+void Fsetdta(const char *buf)
+{
+    __asm__ __volatile__
+    (
+      "pea       (%0)\n\t"
+      "move.w    #26,-(%%sp)\n\t"
+      "trap      #1\n\t"
+      "addq.l    #6,%%sp\n\t"
+    : /* outputs */
+    : "p"(buf) /* inputs */
+    : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+    );
+}
+
+int32_t Fsfirst(const int8_t *filename, int16_t attr)
+{
+  register int32_t val __asm__("d0");
+  __asm__ __volatile__
+  (
+    "move.w    %2,-(%%sp)\n\t"
+    "pea       (%1)\n\t"
+    "move.w    #78,-(%%sp)\n\t"
+    "trap      #1\n\t"
+    "lea       8(%%sp),%%sp\n\t"
+  : "=r"(val) /* outputs */
+  : "p"(filename), "r"(attr) /* inputs */
+  : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+  );
+  return val;
+}
+
 uint32_t Tgettime()
 {
   register uint32_t val __asm__("d0");

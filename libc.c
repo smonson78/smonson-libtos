@@ -229,28 +229,28 @@ void emit_string(char **x, char c) {
 
 int printf(const char *format, ...)
 {
-   va_list arg;
-   int done;
+  va_list arg;
+  int done;
 
-   va_start(arg, format);
-   done = vfprintf(emit_console, NULL, format, arg);
-   va_end(arg);
+  va_start(arg, format);
+  done = vfprintf(emit_console, NULL, format, arg);
+  va_end(arg);
 
-   return done;
+  return done;
 }
 
 int sprintf(char *dest, const char *format, ...)
 {
-   va_list arg;
-   int done;
+  va_list arg;
+  int done;
 
-   va_start(arg, format);
-	 char *dest_copy = dest;
-   done = vfprintf(emit_string, &dest_copy, format, arg);
-	 *dest_copy = '\0';
-   va_end(arg);
+  va_start(arg, format);
+	char *dest_copy = dest;
+  done = vfprintf(emit_string, &dest_copy, format, arg);
+	*dest_copy = '\0';
+  va_end(arg);
 
-   return done;
+  return done;
 }
 
 int puts(const char *s)
@@ -276,16 +276,26 @@ void memcpy(void *dest, const void *src, size_t bytes)
 size_t strlen(const char *s)
 {
 	const char *p = s;
-	while (*p)
+	while (*p != '\0') {
 		p++;
+	}
 	return (size_t)p - (size_t)s;
 }
 
 void strcpy(char *dest, const char *src)
 {
-	while (*src) {
+	while (*src != '\0') {
 		*(dest++) = *(src++);
 	}
+}
+
+int strcmp(const char *first, const char *second) {
+	while (*first != '\0' && *second != '\0' && *first == *second) {
+		first++;
+		second++;
+	}
+
+	return (*first == *second);
 }
 
 void exit(uint16_t retval)
@@ -294,27 +304,27 @@ void exit(uint16_t retval)
 }
 
 void abort() {
-    printf("abort called\n");
+	printf("abort called\n");
 }
 
 void *memset(void *dest, int c, size_t bytes) {
-    while (bytes--) {
-        *(char *)dest = (char)c;
-				dest = (char *)dest + 1;
-    }
-		return dest;
+	while (bytes--) {
+			*(char *)dest = (char)c;
+			dest = (char *)dest + 1;
+	}
+	return dest;
 }
 
 int memcmp(const void *s1, const void *s2, size_t n)
 {
-    while (n--) {
-			if (*((uint8_t *)s1) != *((uint8_t *)s2)) {
-					return *(uint8_t *)s1 - *(uint8_t *)s2;
-			}
-				s1 = (uint8_t *)s1 + 1;
-				s2 = (uint8_t *)s2 + 1;
-    }
-    return 0;
+	while (n--) {
+		if (*((uint8_t *)s1) != *((uint8_t *)s2)) {
+				return *(uint8_t *)s1 - *(uint8_t *)s2;
+		}
+			s1 = (uint8_t *)s1 + 1;
+			s2 = (uint8_t *)s2 + 1;
+	}
+	return 0;
 }
 
 int atoi(const char *number) {

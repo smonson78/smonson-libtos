@@ -48,6 +48,21 @@ int32_t Cconin()
 	return val;
 }
 
+int32_t Cconis()
+{
+    register int32_t val __asm__("d0");
+    __asm__ __volatile__
+    (
+        "move.w #11,-(%%sp)\n\t"
+        "trap #1\n\t"
+        "addq.l #2,%%sp\n\t"
+    : "=r"(val) /* outputs */
+    : /* inputs */
+    : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
+    );
+	return val;
+}
+
 void Cconws(const char* s)
 {
     __asm__ __volatile__

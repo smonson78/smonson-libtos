@@ -10,6 +10,7 @@ void Vsync();
 
 // TOS
 int32_t Cconin();
+int32_t Cconis();
 void Cconws(const char* s);
 void Cconout(const uint16_t ch);
 int32_t Cnecin();

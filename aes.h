@@ -91,7 +91,10 @@ int16_t graf_mouse(int16_t gr_monumber, MFORM *gr_mofaddr);
 int16_t graf_handle(int16_t *gr_hwchar, int16_t *gr_hhchar,
   int16_t *gr_hwbox, int16_t *gr_hhbox);
 
+// Form library
 int16_t form_alert (int16_t fo_adefbttn, const char *fo_astring);
+int16_t form_dial(int16_t fo_diflag, int16_t fo_dilittlx, int16_t fo_dilittly, int16_t fo_dilittlw,
+   int16_t fo_dilittlh, int16_t fo_dibigx, int16_t fo_dibigy, int16_t fo_dibigw, int16_t fo_dibigh);
 
 void v_clswk(int16_t handle);
 void v_clsvwk(int16_t handle);
@@ -106,8 +109,8 @@ void v_contourfill(int16_t handle, int16_t x, int16_t y, int16_t index);
 
 void vro_cpyfm(int16_t handle, int16_t vr_mode, int16_t *pxyarray, MFDB *psrcMFDB, MFDB *pdesMFDB);
 
-// Set alpha cursor to specified position
 #define v_curaddress vs_curaddress
+// Move cursor to specified position
 void vs_curaddress(int16_t handle, int16_t row, int16_t column);
 
 void set_screen_attr();
@@ -130,6 +133,8 @@ int16_t evnt_multi(int16_t ev_mflags,  int16_t ev_mbclicks,
 // VDI
 int16_t vs_color(int16_t handle, int16_t color_index, int16_t *rgb_in);
 int16_t vsf_color(int16_t handle, int16_t color_index);
+int16_t vst_color(int16_t handle, int16_t color_index);
+
 void vr_recfl(int16_t handle, int16_t *pxyarray);
 void v_bar(int16_t handle, int16_t *pxyarray);
 int16_t vswr_mode(int16_t handle, int16_t mode);
@@ -141,8 +146,10 @@ int16_t vsf_style(int16_t handle, int16_t style_index);
 int16_t vsf_perimeter(int16_t handle, int16_t per_vis);
 void vsf_udpat(int16_t handle, int16_t *pfill_pat, int16_t planes);
 void v_circle(int16_t handle, int16_t x, int16_t y, int16_t radius);
-
+void v_justified(int16_t handle, int16_t x, int16_t y, int8_t *string, int16_t length, 
+   int16_t word_space, int16_t char_space);
 void vs_clip(int16_t handle, int16_t clip_flag, int16_t *pxyarray);
+void v_pline(int16_t handle, int16_t count, int16_t *pxyarray);
 
 // resource files
 int16_t rsrc_free();

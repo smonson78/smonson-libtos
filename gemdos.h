@@ -11,6 +11,16 @@ typedef uint16_t FILE;
 #define GEMDOS_WRONLY 2
 #define GEMDOS_RDWR 4
 
+typedef struct
+{
+  int8_t d_reserved[21];    /* Reserved for GEMDOS */
+  uint8_t d_attrib;         /* File attributes     */
+  uint16_t d_time;          /* Time                */
+  uint16_t d_date;          /* Date                */
+  uint32_t d_length;        /* File length         */
+  int8_t d_fname[14];       /* Filename            */
+} DTA;
+
 int32_t gemdos_super(void *stack);
 
 /* Drives/paths */
@@ -23,6 +33,8 @@ void Fclose(FILE handle);
 int32_t Fwrite(FILE handle, int32_t count, void *buf);
 int32_t Fread(FILE handle, int32_t count, void *buf);
 int32_t Fseek(int32_t offset, int16_t handle, int16_t seekmode);
+void Fsetdta(const char *buf);
+int32_t Fsfirst(const int8_t *filename, int16_t attr);
 
 /* Time and date */
 uint32_t Tgettime();

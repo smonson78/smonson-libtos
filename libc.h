@@ -31,6 +31,7 @@ void exit(uint16_t retval);
 int16_t isdigit(char c);
 void memcpy(void *dest, const void *src, size_t bytes);
 void strcpy(char *dest, const char *src);
+int strcmp(const char *first, const char *second);
 int memcmp(const void *s1, const void *s2, size_t n);
 void *memset(void *dest, int c, size_t bytes);
 int atoi(const char *number);
