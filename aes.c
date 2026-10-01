@@ -261,7 +261,7 @@ void vq_mouse(int16_t handle, int16_t *pstatus, int16_t *x, int16_t *y)
 
    vdi();
 
-   *pstatus = int_in[0];
+   *pstatus = vdi_intout[0];
    *x = vdi_ptsout[0];
    *y = vdi_ptsout[1];
 }
@@ -481,7 +481,11 @@ int16_t evnt_multi (int16_t ev_mflags,  int16_t ev_mbclicks,
 
 void vr_recfl(int16_t handle, int16_t *pxyarray)
 {
-   memcpy(vdi_ptsin, pxyarray, sizeof(int16_t) * 4);
+   //memcpy(vdi_ptsin, pxyarray, sizeof(int16_t) * 4);
+   vdi_ptsin[0] = pxyarray[0];
+   vdi_ptsin[1] = pxyarray[1];
+   vdi_ptsin[2] = pxyarray[2];
+   vdi_ptsin[3] = pxyarray[3];
    vdi_control[0] = 114;
    vdi_control[1] = 2;
    vdi_control[3] = 0;
@@ -667,7 +671,7 @@ int16_t vsf_interior(int16_t handle, int16_t style)
 
 void vsf_udpat(int16_t handle, int16_t *pfill_pat, int16_t planes)
 {
-   for (uint16_t i = 0; i < 16; i++) {
+   for (uint16_t i = 0; i < 16 * planes; i++) {
       vdi_intin[i] = pfill_pat[i];
    }
 
