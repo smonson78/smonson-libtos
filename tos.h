@@ -23,4 +23,6 @@ int32_t Mshrink(void *block, int32_t newsize);
 int32_t Random();
 int16_t Getrez();
 
+#define VBL_LIST ((volatile int16_t (**)())0x4ce)
+
 #endif

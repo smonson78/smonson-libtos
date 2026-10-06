@@ -362,7 +362,7 @@ void v_pline(int16_t handle, int16_t count, int16_t *pxyarray)
    // }
 
    // 4 because it's two int16_ts
-   memcpy(vdi_ptsin, pxyarray, sizeof(int16_t) * count);
+   memcpy(vdi_ptsin, pxyarray, 2 * sizeof(int16_t) * count);
 
    vdi_control[0] = 6;
    vdi_control[1] = count;

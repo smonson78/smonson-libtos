@@ -31,7 +31,7 @@ int16_t Dgetdrv()
   return val;
 }
 
-int16_t Fcreate(const int8_t *fname, int16_t attr)
+int16_t Fcreate(const char *fname, int16_t attr)
 {
   register uint16_t val __asm__("d0");
   __asm__ __volatile__
@@ -133,7 +133,7 @@ int32_t Fseek(int32_t offset, int16_t handle, int16_t seekmode)
   return val;
 }
 
-void Fsetdta(const char *buf)
+void Fsetdta(const DTA *dta)
 {
     __asm__ __volatile__
     (
@@ -142,12 +142,12 @@ void Fsetdta(const char *buf)
       "trap      #1\n\t"
       "addq.l    #6,%%sp\n\t"
     : /* outputs */
-    : "p"(buf) /* inputs */
+    : "p"(dta) /* inputs */
     : "d1", "d2", "a0", "a1", "a2" /* clobbered regs */
     );
 }
 
-int32_t Fsfirst(const int8_t *filename, int16_t attr)
+int32_t Fsfirst(const char *filename, int16_t attr)
 {
   register int32_t val __asm__("d0");
   __asm__ __volatile__

@@ -246,6 +246,7 @@ int sprintf(char *dest, const char *format, ...)
 
   va_start(arg, format);
 	char *dest_copy = dest;
+  // FIXME: for sprintf???
   done = vfprintf(emit_string, &dest_copy, format, arg);
 	*dest_copy = '\0';
   va_end(arg);
@@ -295,7 +296,7 @@ int strcmp(const char *first, const char *second) {
 		second++;
 	}
 
-	return (*first == *second);
+	return (*first == *second) ? 0 : 1;
 }
 
 void exit(uint16_t retval)

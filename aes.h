@@ -70,6 +70,40 @@ typedef struct
   int16_t fd_r1, fd_r2, fd_r3; /* Reserved, must be 0         */
 } MFDB;
 
+typedef struct
+{
+  int16_t     font_id;        /* Font number                        0 */
+  int16_t     point;          /* Size in points                     2 */
+  int8_t      name[32];       /* Name of the font                   4 */
+  uint16_t    first_ade;      /* First character in font            36 */
+  uint16_t    last_ade;       /* Last character in font             38 */
+  uint16_t    top;            /* Distance: Top line    <-> Baseline 40 */
+  uint16_t    ascent;         /* Distance: Ascent line <-> Baseline 42 */
+  uint16_t    half;           /* Distance: Half line   <-> Baseline 44 */
+  uint16_t    descent;        /* Distance: Descent line<-> Baseline 46 */
+  uint16_t    bottom;         /* Distance: Bottom line <-> Baseline 48 */
+  uint16_t    max_char_width; /* Largest character width            50 */
+  uint16_t    max_cell_width; /* Largest character cell width       52 */
+  uint16_t    left_offset;    /* Left offset for italic (skewed)    54 */
+  uint16_t    right_offset;   /* Right offset for italic (skewed)   56 */
+  uint16_t    thicken;        /* Thickening factor for bold         58 */
+  uint16_t    ul_size;        /* Width of underline                 60 */
+  uint16_t    lighten;        /* Mask for light (0x5555)            62 */
+  uint16_t    skew;           /* Mask for italic (0x5555)           64 */
+  uint16_t    flags;          /* Various flags:
+                                Set for system font
+                                  Bit 1: Set if horizontal offset
+                                        table is in use
+                                  Bit 2: Set if Motorola format
+                                  Bit 3: Set if non-proportional    66 */
+  uint8_t     *hor_table;     /* Pointer to horizontal offset table 68 */
+  uint16_t    *off_table;     /* Pointer to character offset table  72 */
+  uint16_t    *dat_table;     /* Pointer to font image              76 */
+  uint16_t    form_width;     /* Width of the font image            80 */
+  uint16_t    form_height;    /* Height of the font image           82 */
+  struct font_hdr *next_font;     /* Pointer to next font header    84 */
+} FONT_HDR;
+
 typedef enum {
     M_OFF = 256,
     M_ON = 257
